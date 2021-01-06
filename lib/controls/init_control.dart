@@ -5,6 +5,7 @@ import 'package:kiwi/kiwi.dart';
 class InitControl {
   InitControl() {
     final di = KiwiContainer();
-    di.registerSingleton<Api>((c) => Api());
+    di.clear();
+   di.registerSingleton<Api>((c) => Api());
   }
 }
