@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:app_meow/controls/dashboard_control.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DashboardPage extends StatelessWidget {
   final control = DashboardControl();
@@ -9,41 +10,44 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Positioned(
-            top: 30,
-            left: -50,
-            child: Transform.rotate(
-              angle: pi / 2,
-              child: Image.asset(
-                'assets/images/cat.png',
-                width: 200,
-                height: 200,
+    return Provider(
+      create: ( context) => control,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: [
+            Positioned(
+              top: 30,
+              left: -50,
+              child: Transform.rotate(
+                angle: pi / 2,
+                child: Image.asset(
+                  'assets/images/cat.png',
+                  width: 200,
+                  height: 200,
+                ),
               ),
             ),
-          ),
-          Positioned(
-            top: 120,
-            right: 120,
-            child: Text(
-              'Meow?',
-              style: TextStyle(color: theme.primaryColor, fontSize: 30),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(
-                height: 70,
+            Positioned(
+              top: 120,
+              right: 120,
+              child: Text(
+                'Meow?',
+                style: TextStyle(color: theme.primaryColor, fontSize: 30),
               ),
-              const _DashboardButton()
-            ],
-          ),
-        ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(
+                  height: 70,
+                ),
+                const _DashboardButton()
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -55,13 +59,12 @@ class _DashboardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final control = Provider.of<DashboardControl>(context,listen: false);
     return InkWell(
       borderRadius: BorderRadius.circular(25),
       splashColor: theme.accentColor,
       highlightColor: theme.canvasColor,
-      onTap: () {
-        print('yo');
-      },
+      onTap: () => control.toKittens(context),
       child: Container(
         width: 250,
         height: 50,
