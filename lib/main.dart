@@ -11,13 +11,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Meow...',
       theme: ThemeData(
-
         primarySwatch: Colors.blue,
-
-
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'El Gato es muy biene'),
     );
   }
 }
@@ -36,27 +33,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-
       _counter++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-
         title: Text(widget.title),
       ),
       body: Center(
-
         child: Column(
-
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Image.asset('assets/images/cat.jpg'),
             Text(
-              'There will be lot of kitties',
+              'El Meowo meowed this many times',
             ),
             Text(
               '$_counter',
