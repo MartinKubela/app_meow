@@ -30,9 +30,6 @@ dependencies:
   #https://pub.dev/packages/json_serializable/
   json_serializable: ^3.5.1
 
-  #https://pub.dev/packages/kiwi/
-  kiwi: ^2.1.1
-
   #https://pub.dev/packages/just_audio/install
   just_audio: ^0.6.5
 
