@@ -15,3 +15,32 @@ class Cat {
 
   Map<String, dynamic> toJson() => _$CatToJson(this);
 }
+
+@JsonSerializable()
+class CatWeight {
+  final String imperial;
+  final String metric;
+
+  const CatWeight({this.imperial, this.metric});
+
+  factory CatWeight.fromJson(Map<String, dynamic> json) =>
+      _$CatWeightFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CatWeightToJson(this);
+}
+
+@JsonSerializable()
+class CatImage {
+  @JsonKey(nullable: true)
+  final String id;
+  final int width;
+  final int height;
+  final String url;
+
+  const CatImage({this.id, this.width, this.height, this.url});
+
+  factory CatImage.fromJson(Map<String, dynamic> json) =>
+      _$CatImageFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CatImageToJson(this);
+}

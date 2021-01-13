@@ -72,32 +72,17 @@ class _CatCard extends StatelessWidget {
     final theme = (Theme.of(context));
     return Padding(
       padding: EdgeInsets.only(top: CatTheme.paddingHead),
-      child: Stack(
-        overflow: Overflow.visible,alignment: Alignment.topCenter,
-        children: [
-          Container(
-            width: 300,
-            height: 150,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: theme.accentColor.withOpacity(0.5)),
-            alignment: Alignment.center,
-            child: Text(cat.id),
-          ),
-          Positioned(
-            top: -50,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-              clipBehavior: Clip.antiAlias,
-              child: Image.network(
-                cat.imagePath,
-                width: 220,
-                height: 90,fit: BoxFit.cover,
-              ),
-            ),
-          )
-        ],
+      child: Container(
+        width: 300,
+        height: 150,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: theme.accentColor.withOpacity(0.5)),
+        alignment: Alignment.center,
+        child: Image.network(
+          cat.imagePath,
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }
