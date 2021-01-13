@@ -10,13 +10,17 @@ class ApiCats {
 
   Future<Iterable<Cat>> getAllCats(
       [int page = 0, int limit = 5, String order = 'Desc']) async {
-    final url = '${Consts.apiUrl}images/search';
+    final url = '${Consts.apiUrl}images/search?limit=$limit&page=$page&order=$order';
 
     try {
       final response = await api.client.get(url);
 
       if (response.statusCode == 200) {
-        return [Cat.fromJson(response.data.first)];
+        final cats = <Cat>[];
+        for (var json in response.data) {
+          cats.add(Cat.fromJson(json));
+        }
+        return cats;
       } else {
         debugPrint('${response.statusCode} : ${response.data.toString()}');
         throw response.statusCode;

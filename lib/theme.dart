@@ -7,6 +7,7 @@ class CatTheme {
   static Color backgroundColor = Color(0xffF2F2F2);
   static Color accentColor = Color(0xffC5D0D2);
   static Color canvasColor = Colors.transparent;
+  static double paddingHead = 80.0;
 
   static ThemeData style() {
     return ThemeData(
