@@ -10,7 +10,7 @@ class BreedsControl with BackNavigator {
     return await api.apiBreeds.getBreeds();
   }
 
-  bool addBreedToFavs(Breed breed) {
-    CatSettings().favBreed(breed);
+  Future<bool> addBreedToFavs(Breed breed) async {
+    return await CatSettings().favBreed(breed);
   }
 }

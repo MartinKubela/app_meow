@@ -71,10 +71,19 @@ class BreedsPage extends StatelessWidget {
 
 const _cardSectionWidth = 80.0;
 
-class _BreedCard extends StatelessWidget {
+class _BreedCard extends StatefulWidget {
   final Breed breed;
 
   _BreedCard(this.breed, {Key key}) : super(key: key ?? ValueKey(breed.id));
+
+  @override
+  __BreedCardState createState() => __BreedCardState();
+}
+
+class __BreedCardState extends State<_BreedCard> {
+  Breed get breed => widget.breed;
+
+  bool _fav = false;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +105,12 @@ class _BreedCard extends StatelessWidget {
           color: Colors.transparent,
           shadowColor: Colors.transparent,
           child: InkWell(
-            onTap: () => control.addBreedToFavs(breed),
+            onTap: () async {
+              final isFav = await control.addBreedToFavs(breed);
+              setState(() {
+                _fav = isFav;
+              });
+            },
             splashColor: theme.accentColor,
             highlightColor: Colors.transparent,
             borderRadius: BorderRadius.circular(10),
@@ -118,8 +132,8 @@ class _BreedCard extends StatelessWidget {
                   ),
                 ),
                 Icon(
-                  Icons.star,
-                  color: Colors.amber,
+                  _fav ? Icons.star : Icons.star_border,
+                  color: _fav ? Colors.amber : Colors.grey,
                 )
               ],
             ),
