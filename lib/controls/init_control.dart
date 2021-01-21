@@ -24,6 +24,7 @@ class InitControl {
   Future<bool> _setUpPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     CatSettings().setPrefs(prefs);
+    await CatSettings().initUnits();
     return true;
   }
 

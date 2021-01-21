@@ -1,5 +1,4 @@
 import 'package:app_meow/components/loading_indicator.dart';
-import 'package:app_meow/controls/breeds_control.dart';
 import 'package:app_meow/controls/favs_control.dart';
 import 'package:app_meow/entities/breed_entity.dart';
 import 'package:app_meow/theme.dart';
@@ -38,14 +37,24 @@ class FavsPage extends StatelessWidget {
                   ),
                   FutureBuilder(
                     future: control.getFavBreeds(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<Iterable<Breed>> snapshot) {
+                    builder:
+                        (BuildContext context, AsyncSnapshot<bool> snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
+                        if (control.favBreeds.isEmpty) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: CatTheme.paddingHead, horizontal: 30),
+                            child: Text(
+                              'No saved breeds, go explore some and add them to favourites.',
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        }
                         return SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: snapshot.data
+                            children: control.favBreeds
                                 .map<Widget>(
                                   (e) => _BreedCard(e),
                                 )
@@ -84,12 +93,12 @@ class _BreedCard extends StatefulWidget {
 class __BreedCardState extends State<_BreedCard> {
   Breed get breed => widget.breed;
 
-  bool _fav = false;
+  bool _fav = true;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final control = Provider.of<BreedsControl>(context);
+    final control = Provider.of<FavsControl>(context);
     return Padding(
       padding: EdgeInsets.only(
         left: 30,
@@ -107,10 +116,8 @@ class __BreedCardState extends State<_BreedCard> {
           shadowColor: Colors.transparent,
           child: InkWell(
             onTap: () async {
-              final isFav = await control.addBreedToFavs(breed);
-              setState(() {
-                _fav = isFav;
-              });
+              final isFav = await control.removeFromFavs(breed);
+              if (isFav) setState(() {});
             },
             splashColor: theme.accentColor,
             highlightColor: Colors.transparent,
