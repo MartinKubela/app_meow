@@ -79,9 +79,13 @@ class _CatCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             color: theme.accentColor.withOpacity(0.5)),
         alignment: Alignment.center,
-        child: Image.network(
-          cat.imagePath,
-          fit: BoxFit.fill,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Image.network(
+            cat.imagePath,
+            fit: BoxFit.cover,
+            width: 300,
+          ),
         ),
       ),
     );

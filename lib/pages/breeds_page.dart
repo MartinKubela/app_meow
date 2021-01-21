@@ -5,6 +5,7 @@ import 'package:app_meow/theme.dart';
 import 'package:app_meow/tools/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BreedsPage extends StatelessWidget {
   final control = BreedsControl();
@@ -14,49 +15,52 @@ class BreedsPage extends StatelessWidget {
     final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () => control.onWillPop(context),
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: theme.backgroundColor,
-          body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30, top: 30),
-                    child: Text(
-                      'Breeds:',
-                      style: theme.textTheme.subtitle2,
+      child: Provider(
+        create: (context) => control,
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: theme.backgroundColor,
+            body: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 30, top: 30),
+                      child: Text(
+                        'Breeds:',
+                        style: theme.textTheme.subtitle2,
+                      ),
                     ),
                   ),
-                ),
-                FutureBuilder(
-                  future: control.getBreeds(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<Iterable<Breed>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: snapshot.data
-                              .map<Widget>(
-                                (e) => _BreedCard(e),
-                              )
-                              .toList(growable: false),
-                        ),
-                      );
-                    } else {
-                      return LoadingIndicator();
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: CatTheme.paddingHead,
-                )
-              ],
+                  FutureBuilder(
+                    future: control.getBreeds(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<Iterable<Breed>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: snapshot.data
+                                .map<Widget>(
+                                  (e) => _BreedCard(e),
+                                )
+                                .toList(growable: false),
+                          ),
+                        );
+                      } else {
+                        return LoadingIndicator();
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: CatTheme.paddingHead,
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -75,6 +79,7 @@ class _BreedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final control = Provider.of<BreedsControl>(context);
     return Padding(
       padding: EdgeInsets.only(
         left: 30,
@@ -91,7 +96,7 @@ class _BreedCard extends StatelessWidget {
           color: Colors.transparent,
           shadowColor: Colors.transparent,
           child: InkWell(
-            onTap: () {},
+            onTap: () => control.addBreedToFavs(breed),
             splashColor: theme.accentColor,
             highlightColor: Colors.transparent,
             borderRadius: BorderRadius.circular(10),
@@ -111,6 +116,10 @@ class _BreedCard extends StatelessWidget {
                       _InfoRow(title: "Country", data: breed.countryCode),
                     ],
                   ),
+                ),
+                Icon(
+                  Icons.star,
+                  color: Colors.amber,
                 )
               ],
             ),
