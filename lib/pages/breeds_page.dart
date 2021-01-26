@@ -8,15 +8,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BreedsPage extends StatelessWidget {
-  final control = BreedsControl();
+  final listState = GlobalKey<BreedsListState>();
 
   @override
   Widget build(BuildContext context) {
+    final control = BreedsControl(listState);
     final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () => control.onWillPop(context),
-      child: Provider(
-        create: (context) => control,
+      child: MultiProvider(
+        providers: [
+          Provider(
+            create: (context) => control,
+          ),
+          Provider(
+            create: (context) => listState,
+          ),
+        ],
         child: SafeArea(
           child: Scaffold(
             backgroundColor: theme.accentColor,
@@ -36,27 +44,58 @@ class _BreedsBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final control = Provider.of<BreedsControl>(context);
-    return FutureBuilder(
-      future: control.getBreeds(),
-      builder: (BuildContext context, AsyncSnapshot<Iterable<Breed>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: snapshot.data
-                  .map<Widget>(
-                    (e) => BreedCard<BreedsControl>(e),
-                  )
-                  .toList(growable: false),
-            ),
-          );
-        } else {
-          return LoadingIndicator();
-        }
-      },
+    final listKey = Provider.of<GlobalKey<BreedsListState>>(context);
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: TextField(
+            controller: control.filterInput,
+            cursorColor: theme.primaryColor,
+            decoration: InputDecoration(
+                hintStyle: theme.textTheme.caption,
+                hintText: 'Search breed...'),
+          ),
+        ),
+        FutureBuilder(
+          future: control.getBreeds(),
+          builder:
+              (BuildContext context, AsyncSnapshot<Iterable<Breed>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: _BreedsList(key: listKey),
+              );
+            } else {
+              return LoadingIndicator();
+            }
+          },
+        )
+      ],
     );
   }
 }
 
+class _BreedsList extends StatefulWidget {
+  @override
+  BreedsListState createState() => BreedsListState();
+
+  _BreedsList({Key key}) : super(key: key);
+}
+
+class BreedsListState extends State<_BreedsList> {
+  @override
+  Widget build(BuildContext context) {
+    final control = Provider.of<BreedsControl>(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: control.breeds
+          .map<Widget>(
+            (e) => BreedCard<BreedsControl>(e),
+          )
+          .toList(growable: false),
+    );
+  }
+}
