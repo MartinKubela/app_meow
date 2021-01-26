@@ -21,6 +21,8 @@ class CatSettings {
 
   final _favIds = <String>[];
 
+  List<String> get favourites => _favIds;
+
   Units _units;
 
   Units get units => _units;

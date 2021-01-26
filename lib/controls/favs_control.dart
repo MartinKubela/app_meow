@@ -1,9 +1,10 @@
 import 'package:app_meow/entities/breed_entity.dart';
 import 'package:app_meow/tools/back_navigator.dart';
+import 'package:app_meow/tools/handlers/breed_handler.dart';
 import 'package:app_meow/tools/settings.dart';
 import 'package:dio/dio.dart';
 
-class FavsControl with BackNavigator {
+class FavsControl extends BreedHandler with BackNavigator {
   final favBreeds = <Breed>[];
   final VoidCallback _refreshCallback;
 
@@ -15,13 +16,13 @@ class FavsControl with BackNavigator {
     return true;
   }
 
-  Future<bool> removeFromFavs(Breed breed) async {
+  @override
+  Future<bool> handleBreedFav(Breed breed) async {
     final done = await CatSettings().unfavBreed(breed);
     if (done) {
       favBreeds.remove(breed);
     }
+    _refreshCallback();
     return done;
   }
-
-  void refresh() => _refreshCallback();
 }
