@@ -1,4 +1,5 @@
 import 'package:app_meow/components/loading_indicator.dart';
+import 'package:app_meow/components/page_layout.dart';
 import 'package:app_meow/controls/favs_control.dart';
 import 'package:app_meow/entities/breed_entity.dart';
 import 'package:app_meow/theme.dart';
@@ -25,62 +26,48 @@ class _FavsPageState extends State<FavsPage> {
         create: (context) => control,
         child: SafeArea(
           child: Scaffold(
-            backgroundColor: theme.backgroundColor,
-            body: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 30, top: 30),
-                      child: Text(
-                        'Favourite breeds:',
-                        style: theme.textTheme.subtitle2,
-                      ),
-                    ),
-                  ),
-                  FutureBuilder(
-                    future: control.getFavBreeds(),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (control.favBreeds.isEmpty) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: CatTheme.paddingHead, horizontal: 30),
-                            child: Text(
-                              'No saved breeds, go explore some and add them to favourites.',
-                              textAlign: TextAlign.center,
-                            ),
-                          );
-                        }
-                        return SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: control.favBreeds
-                                .map<Widget>(
-                                  (e) => _BreedCard(e),
-                            )
-                                .toList(growable: false),
-                          ),
-                        );
-                      } else {
-                        return LoadingIndicator();
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    height: CatTheme.paddingHead,
-                  )
-                ],
-              ),
-            ),
-          ),
+              backgroundColor: theme.accentColor,
+              body:
+                  PageLayout(title: 'Favourite breeds', child: _FavsBuilder())),
         ),
       ),
+    );
+  }
+}
+
+class _FavsBuilder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final control = Provider.of<FavsControl>(context);
+    return FutureBuilder(
+      future: control.getFavBreeds(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (control.favBreeds.isEmpty) {
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: CatTheme.paddingHead, horizontal: 30),
+              child: Text(
+                'No saved breeds, go explore some and add them to favourites.',
+                textAlign: TextAlign.center,
+              ),
+            );
+          }
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: control.favBreeds
+                  .map<Widget>(
+                    (e) => _BreedCard(e),
+                  )
+                  .toList(growable: false),
+            ),
+          );
+        } else {
+          return LoadingIndicator();
+        }
+      },
     );
   }
 }

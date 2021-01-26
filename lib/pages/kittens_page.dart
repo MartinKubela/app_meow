@@ -1,9 +1,11 @@
 import 'package:app_meow/components/loading_indicator.dart';
+import 'package:app_meow/components/page_layout.dart';
 import 'package:app_meow/controls/kittens_control.dart';
 import 'package:app_meow/entities/cat_entity.dart';
 import 'package:app_meow/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class KittensPage extends StatelessWidget {
   final control = KittensControl();
@@ -14,50 +16,42 @@ class KittensPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () => control.onWillPop(context),
       child: SafeArea(
-        child: Scaffold(
-          backgroundColor: theme.backgroundColor,
-          body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30, top: 30),
-                    child: Text(
-                      'Kittens:',
-                      style: theme.textTheme.subtitle2,
-                    ),
-                  ),
-                ),
-                FutureBuilder(
-                  future: control.getKittens(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<Iterable<Cat>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: snapshot.data
-                              .map<Widget>((e) => _CatCard(e))
-                              .toList(growable: false),
-                        ),
-                      );
-                    } else {
-                      return LoadingIndicator();
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: CatTheme.paddingHead,
-                )
-              ],
+        child: Provider(
+          create: (context) => control,
+          child: Scaffold(
+            backgroundColor: theme.accentColor,
+            body: PageLayout(
+              title: 'Kittens',
+              child: _KittensBuilder(),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _KittensBuilder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final control = Provider.of<KittensControl>(context);
+    return FutureBuilder(
+      future: control.getKittens(),
+      builder: (BuildContext context, AsyncSnapshot<Iterable<Cat>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: snapshot.data
+                  .map<Widget>((e) => _CatCard(e))
+                  .toList(growable: false),
+            ),
+          );
+        } else {
+          return LoadingIndicator();
+        }
+      },
     );
   }
 }

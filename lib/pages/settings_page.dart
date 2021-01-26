@@ -1,5 +1,5 @@
+import 'package:app_meow/components/page_layout.dart';
 import 'package:app_meow/controls/settings_control.dart';
-import 'package:app_meow/theme.dart';
 import 'package:app_meow/tools/enums.dart';
 import 'package:app_meow/tools/extensions/string_extension.dart';
 import 'package:app_meow/tools/parser.dart';
@@ -20,46 +20,26 @@ class SettingsPage extends StatelessWidget {
         create: (context) => control,
         child: SafeArea(
           child: Scaffold(
-            backgroundColor: theme.backgroundColor,
-            body: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 30, top: 30),
-                      child: Text(
-                        'Settings',
-                        style: theme.textTheme.subtitle2,
+              backgroundColor: theme.accentColor,
+              body: PageLayout(
+                title: 'Settings',
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(
+                        'Units: ',
                       ),
-                    ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      _UnitsDropdown(),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 40),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Units: ',
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        _UnitsDropdown(),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: CatTheme.paddingHead,
-                  )
-                ],
-              ),
-            ),
-          ),
+                ),
+              )),
         ),
       ),
     );
@@ -84,10 +64,10 @@ class __UnitsDropdownState extends State<_UnitsDropdown> {
           items: Units.values
               .map<DropdownMenuItem>(
                 (e) => DropdownMenuItem(
-                  child: Text(CatParser.enumValueToString(e).capitalize),
-                  value: e,
-                ),
-              )
+              child: Text(CatParser.enumValueToString(e).capitalize),
+              value: e,
+            ),
+          )
               .toList(growable: false),
           onChanged: (e) => _updateUnits(e)),
     );
