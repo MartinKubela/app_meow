@@ -1,7 +1,7 @@
 import 'package:app_meow/components/loading_indicator.dart';
+import 'package:app_meow/components/page_layout.dart';
 import 'package:app_meow/controls/breeds_control.dart';
 import 'package:app_meow/entities/breed_entity.dart';
-import 'package:app_meow/theme.dart';
 import 'package:app_meow/tools/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,52 +19,43 @@ class BreedsPage extends StatelessWidget {
         create: (context) => control,
         child: SafeArea(
           child: Scaffold(
-            backgroundColor: theme.backgroundColor,
-            body: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 30, top: 30),
-                      child: Text(
-                        'Breeds:',
-                        style: theme.textTheme.subtitle2,
-                      ),
-                    ),
-                  ),
-                  FutureBuilder(
-                    future: control.getBreeds(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<Iterable<Breed>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: snapshot.data
-                                .map<Widget>(
-                                  (e) => _BreedCard(e),
-                                )
-                                .toList(growable: false),
-                          ),
-                        );
-                      } else {
-                        return LoadingIndicator();
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    height: CatTheme.paddingHead,
-                  )
-                ],
-              ),
+            backgroundColor: theme.accentColor,
+            body: PageLayout(
+              title: 'Breeds',
+              child: _BreedsBuilder(),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BreedsBuilder extends StatelessWidget {
+  const _BreedsBuilder({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final control = Provider.of<BreedsControl>(context);
+    return FutureBuilder(
+      future: control.getBreeds(),
+      builder: (BuildContext context, AsyncSnapshot<Iterable<Breed>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: snapshot.data
+                  .map<Widget>(
+                    (e) => _BreedCard(e),
+                  )
+                  .toList(growable: false),
+            ),
+          );
+        } else {
+          return LoadingIndicator();
+        }
+      },
     );
   }
 }
