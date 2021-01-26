@@ -22,9 +22,9 @@ class DashboardPage extends StatelessWidget {
             children: [
               Positioned(
                 top: 30,
-                left: -50,
+                right: -50,
                 child: Transform.rotate(
-                  angle: pi / 2,
+                  angle: (3 / 2) * pi,
                   child: Image.asset(
                     'assets/images/cat.png',
                     width: 200,
@@ -33,18 +33,18 @@ class DashboardPage extends StatelessWidget {
                 ),
               ),
               Positioned(
-                top: 120,
-                right: 120,
+                top: 100,
+                left: 50,
                 child: Text(
                   'Meow?',
-                  style: TextStyle(color: theme.primaryColor, fontSize: 30),
+                  style: theme.textTheme.headline2,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 70.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: MenuType.values
                       .map<Widget>((type) => _DashboardButton(type))
                       .toList(growable: false),
@@ -67,23 +67,34 @@ class _DashboardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final control = Provider.of<DashboardControl>(context, listen: false);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 25),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(25),
-          splashColor: theme.accentColor,
-          highlightColor: theme.canvasColor,
-          onTap: () => control.resolvePage(context, type),
-          child: Container(
-            width: 250,
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              border: Border.all(color: theme.primaryColor, width: 2),
-            ),
-            alignment: Alignment.center,
-            child: Text('Explore ${CatParser.enumValueToString(type)}'),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 25, left: 20, right: 20),
+      child: InkWell(
+        splashColor: theme.accentColor,
+        highlightColor: theme.canvasColor,
+        onTap: () => control.resolvePage(context, type),
+        child: Container(
+          width: 250,
+          height: 50,
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 20,
+              ),
+              Icon(
+                Icons.circle,
+                color: theme.primaryColor,
+                size: 10,
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Text(
+                'Explore ${CatParser.enumValueToString(type)}',
+                style: theme.textTheme.bodyText2,
+              ),
+            ],
           ),
         ),
       ),
