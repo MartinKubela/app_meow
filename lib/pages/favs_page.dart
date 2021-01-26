@@ -7,11 +7,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FavsPage extends StatelessWidget {
-  final control = FavsControl();
+class FavsPage extends StatefulWidget {
+  @override
+  _FavsPageState createState() => _FavsPageState();
+}
+
+class _FavsPageState extends State<FavsPage> {
+  void _refresh() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
+    final control = FavsControl(_refresh);
     final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () => control.onWillPop(context),
@@ -57,7 +63,7 @@ class FavsPage extends StatelessWidget {
                             children: control.favBreeds
                                 .map<Widget>(
                                   (e) => _BreedCard(e),
-                                )
+                            )
                                 .toList(growable: false),
                           ),
                         );
@@ -81,18 +87,10 @@ class FavsPage extends StatelessWidget {
 
 const _cardSectionWidth = 80.0;
 
-class _BreedCard extends StatefulWidget {
+class _BreedCard extends StatelessWidget {
   final Breed breed;
 
   _BreedCard(this.breed, {Key key}) : super(key: key ?? ValueKey(breed.id));
-
-  @override
-  __BreedCardState createState() => __BreedCardState();
-}
-
-class __BreedCardState extends State<_BreedCard> {
-  Breed get breed => widget.breed;
-
   bool _fav = true;
 
   @override
@@ -117,7 +115,7 @@ class __BreedCardState extends State<_BreedCard> {
           child: InkWell(
             onTap: () async {
               final isFav = await control.removeFromFavs(breed);
-              if (isFav) setState(() {});
+              control.refresh();
             },
             splashColor: theme.accentColor,
             highlightColor: Colors.transparent,
