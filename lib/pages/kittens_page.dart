@@ -9,11 +9,12 @@ import 'package:provider/provider.dart';
 
 ///Kittens page layout
 class KittensPage extends StatelessWidget {
-  final control = KittensControl();
+  final listState = GlobalKey<KittensBuilderState>();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final control = KittensControl(listState);
     return WillPopScope(
       onWillPop: () => control.onWillPop(context),
       child: SafeArea(
@@ -21,9 +22,16 @@ class KittensPage extends StatelessWidget {
           create: (context) => control,
           child: Scaffold(
             backgroundColor: theme.accentColor,
-            body: PageLayout(
-              title: 'Kittens',
-              child: _KittensBuilder(),
+            body: RefreshIndicator(
+              onRefresh: control.refresh,
+              backgroundColor: Colors.white,
+              child: PageLayout(
+                title: 'Kittens',
+                child: KittensBuilder(
+                  control,
+                  key: listState,
+                ),
+              ),
             ),
           ),
         ),
@@ -33,12 +41,20 @@ class KittensPage extends StatelessWidget {
 }
 
 ///Separate widget to nicer UI layout
-class _KittensBuilder extends StatelessWidget {
+class KittensBuilder extends StatefulWidget {
+  final KittensControl control;
+
+  @override
+  KittensBuilderState createState() => KittensBuilderState();
+
+  KittensBuilder(this.control, {Key key}) : super(key: key);
+}
+
+class KittensBuilderState extends State<KittensBuilder> {
   @override
   Widget build(BuildContext context) {
-    final control = Provider.of<KittensControl>(context);
     return FutureBuilder(
-      future: control.getKittens(),
+      future: widget.control.getKittens(),
       builder: (BuildContext context, AsyncSnapshot<Iterable<Cat>> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return SizedBox(
