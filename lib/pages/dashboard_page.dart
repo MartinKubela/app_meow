@@ -6,6 +6,7 @@ import 'package:app_meow/tools/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Dashboard page layout
 class DashboardPage extends StatelessWidget {
   final control = DashboardControl();
 
@@ -58,6 +59,7 @@ class DashboardPage extends StatelessWidget {
   }
 }
 
+/// Buttons are created via iteration of all values in [MenuType] enum
 class _DashboardButton extends StatelessWidget {
   final MenuType type;
 

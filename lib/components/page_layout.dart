@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
+/// Base page layout used accross pages
 class PageLayout extends StatelessWidget {
   final String title;
   final Widget child;

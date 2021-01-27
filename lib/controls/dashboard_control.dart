@@ -5,7 +5,9 @@ import 'package:app_meow/pages/settings_page.dart';
 import 'package:app_meow/tools/enums.dart';
 import 'package:flutter/material.dart';
 
+///Control class for [DashboardPage]
 class DashboardControl {
+  ///Resolves page based on [MenuType], then invokes its method
   resolvePage(BuildContext context, MenuType type) {
     switch (type) {
       case MenuType.kittens:
@@ -22,6 +24,8 @@ class DashboardControl {
         break;
     }
   }
+
+  /// ----- Methods redirecting to certain pages -----
 
   void _toKittens(context) => Navigator.pushReplacement(
       context, MaterialPageRoute(builder: (context) => KittensPage()));

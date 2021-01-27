@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 
 import 'api.dart';
 
+///Api responsible for getting breeds from REST
 class ApiBreeds {
   final Api api;
 
   ApiBreeds(this.api);
 
+  ///Gets breeds and parse them into [Breed] entities
   Future<Iterable<Breed>> getBreeds(
       [int page = 0, int limit = 5, String order = 'Desc']) async {
     final url = '${Consts.apiUrl}breeds';

@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Breeds page layout
 class BreedsPage extends StatelessWidget {
   final listState = GlobalKey<BreedsListState>();
 
@@ -39,6 +40,7 @@ class BreedsPage extends StatelessWidget {
   }
 }
 
+/// Widget for separation larger UI
 class _BreedsBuilder extends StatelessWidget {
   const _BreedsBuilder({Key key}) : super(key: key);
 
@@ -59,6 +61,8 @@ class _BreedsBuilder extends StatelessWidget {
                 hintText: 'Search breed...'),
           ),
         ),
+
+        /// After data from [getBreeds] is got, create breeds list
         FutureBuilder(
           future: control.getBreeds(),
           builder:
@@ -78,6 +82,7 @@ class _BreedsBuilder extends StatelessWidget {
   }
 }
 
+/// Widget that simply builds list of data
 class _BreedsList extends StatefulWidget {
   @override
   BreedsListState createState() => BreedsListState();

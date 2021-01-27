@@ -7,11 +7,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Favourite page layout
 class FavsPage extends StatefulWidget {
   @override
   _FavsPageState createState() => _FavsPageState();
 }
 
+///State of page
+///
+/// state is needed for reRender of page when breed is removed from favs
+/// its need to rebuild list with new values
 class _FavsPageState extends State<FavsPage> {
   void _refresh() => setState(() {});
 
@@ -27,13 +32,14 @@ class _FavsPageState extends State<FavsPage> {
           child: Scaffold(
               backgroundColor: theme.accentColor,
               body:
-              PageLayout(title: 'Favourite breeds', child: _FavsBuilder())),
+                  PageLayout(title: 'Favourite breeds', child: _FavsBuilder())),
         ),
       ),
     );
   }
 }
 
+///Separate widget for proper UI
 class _FavsBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

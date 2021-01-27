@@ -2,6 +2,9 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'cat_entity.g.dart';
 
+///Cat entity,
+///
+/// [toJson], [Breed.fromJson(json)] methods are generated with [JsonSerializableGenerator]
 @JsonSerializable(nullable: false)
 class Cat {
   final String id;

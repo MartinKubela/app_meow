@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+///Base theme defined inside [MaterialApp] to provide values trough [BuildContext]
 class CatTheme {
   final BorderRadius borderRadius = BorderRadius.circular(8);
 

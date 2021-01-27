@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Kittens page layout
 class KittensPage extends StatelessWidget {
   final control = KittensControl();
 
@@ -31,6 +32,7 @@ class KittensPage extends StatelessWidget {
   }
 }
 
+///Separate widget to nicer UI layout
 class _KittensBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,7 @@ class _KittensBuilder extends StatelessWidget {
   }
 }
 
+/// Card displaying cat image
 class _CatCard extends StatelessWidget {
   final Cat cat;
 

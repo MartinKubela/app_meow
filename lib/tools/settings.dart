@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:app_meow/entities/breed_entity.dart';
+import 'package:app_meow/pages/settings_page.dart';
 import 'package:app_meow/tools/parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'enums.dart';
 
+///App setting class, used for offline handling, init handling and other stuff
 class CatSettings {
+  /// ----- Singleton initializer -----
   static final CatSettings _singleton = CatSettings._internal();
 
   factory CatSettings() {
@@ -14,6 +17,8 @@ class CatSettings {
   }
 
   CatSettings._internal();
+
+  /// ---- ----
 
   SharedPreferences _prefs;
 
@@ -29,6 +34,7 @@ class CatSettings {
 
   bool get isMetric => _units == Units.metric;
 
+  ///If units are stored in offline storage load them, othervise save [Units.metric] as default
   Future<void> initUnits() async {
     if (_prefs.containsKey('units')) {
       switch (_prefs.getString('units')) {
@@ -48,6 +54,7 @@ class CatSettings {
     }
   }
 
+  /// Update units from [SettingsPage]
   Future<bool> updateUnits(Units newUnits) async {
     if (_prefs.getString('units') == CatParser.enumValueToString(newUnits)) {
       return Future.value(true);
@@ -58,6 +65,7 @@ class CatSettings {
     }
   }
 
+  ///Save breed into favourites, save its key for offline loading
   Future<bool> favBreed(Breed breed) async {
     if (_prefs.containsKey(breed.id)) {
       await _prefs.remove(breed.id);
@@ -72,6 +80,7 @@ class CatSettings {
     }
   }
 
+  /// Removes breed from favourites
   Future<bool> unfavBreed(Breed breed) async {
     if (_prefs.containsKey(breed.id)) {
       await _prefs.remove(breed.id);
@@ -83,10 +92,12 @@ class CatSettings {
     }
   }
 
+  /// Save all ids for later loading back
   void _updateIds() {
     _prefs.setStringList('favIds', _favIds);
   }
 
+  /// Load favourtites breeds from offline storage based on their saved ids
   Iterable<Breed> getFavBreeds() {
     final toReturn = <Breed>[];
     final ids = _prefs.getStringList('favIds');

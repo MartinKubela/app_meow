@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///Setting page layout
 class SettingsPage extends StatelessWidget {
   final control = SettingsControl();
 
@@ -46,11 +47,15 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
+///Dropdown widget used for choosing multiple values
+///
+/// in this case [Units]
 class _UnitsDropdown extends StatefulWidget {
   @override
   __UnitsDropdownState createState() => __UnitsDropdownState();
 }
 
+///State of [Units] dropdown, handles select logic on unit click
 class __UnitsDropdownState extends State<_UnitsDropdown> {
   Units _value = CatSettings().units;
 
@@ -64,10 +69,10 @@ class __UnitsDropdownState extends State<_UnitsDropdown> {
           items: Units.values
               .map<DropdownMenuItem>(
                 (e) => DropdownMenuItem(
-              child: Text(CatParser.enumValueToString(e).capitalize),
-              value: e,
-            ),
-          )
+                  child: Text(CatParser.enumValueToString(e).capitalize),
+                  value: e,
+                ),
+              )
               .toList(growable: false),
           onChanged: (e) => _updateUnits(e)),
     );

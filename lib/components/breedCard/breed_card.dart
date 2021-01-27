@@ -6,6 +6,10 @@ import 'package:provider/provider.dart';
 
 const _cardSectionWidth = 100.0;
 
+///Breed card
+///
+/// [T] - defines controller with [handleBreedFav] method
+/// method is located in [BreedHandler] mixin, so controller must implemment this mixin
 class BreedCard<T extends BreedHandler> extends StatefulWidget {
   final Breed breed;
   final bool initFav;
@@ -17,6 +21,7 @@ class BreedCard<T extends BreedHandler> extends StatefulWidget {
   __BreedCardState createState() => __BreedCardState<T>();
 }
 
+/// State of breed card
 class __BreedCardState<T extends BreedHandler> extends State<BreedCard> {
   Breed get breed => widget.breed;
 
@@ -25,6 +30,8 @@ class __BreedCardState<T extends BreedHandler> extends State<BreedCard> {
   @override
   Widget build(BuildContext context) {
     _fav = widget.initFav;
+
+    ///Check if breed is already in favs
     _fav = CatSettings().favourites.contains(breed.id) ? true : false;
     final theme = Theme.of(context);
     final control = Provider.of<T>(context);
@@ -100,6 +107,7 @@ class __BreedCardState<T extends BreedHandler> extends State<BreedCard> {
   }
 }
 
+///Info row widget
 class _InfoRow extends StatelessWidget {
   final String title;
   final dynamic data;
