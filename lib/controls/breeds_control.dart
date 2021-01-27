@@ -17,15 +17,13 @@ class BreedsControl extends BreedHandler with BackNavigator {
 
   BreedsControl(this._listState) {
     ///Listener on filter input
-    filterInput.addListener(() {
+    filterInput.addListener(() async {
       ///On each character inputed filter breeds based on breeds that contains
       ///certain character in its name
-      _listState.currentState.setState(
-        () => breeds = _allBreeds
-            .where((b) =>
-                b.name.toLowerCase().contains(filterInput.text.toLowerCase()))
-            .toList(growable: false),
-      );
+
+      breeds = await searchBreeds(filterInput.text);
+
+      _listState.currentState.setState(() {});
     });
   }
 
@@ -34,6 +32,12 @@ class BreedsControl extends BreedHandler with BackNavigator {
     final _breeds = await api.apiBreeds.getBreeds();
     _allBreeds.addAll(_breeds);
     breeds = _allBreeds;
+    return _breeds;
+  }
+
+  ///Gets breeds from API after user search
+  Future<Iterable<Breed>> searchBreeds(String query) async {
+    final _breeds = await api.apiBreeds.getSearchBreeds(query);
     return _breeds;
   }
 

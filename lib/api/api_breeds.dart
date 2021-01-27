@@ -33,4 +33,28 @@ class ApiBreeds {
       rethrow;
     }
   }
+
+  ///Search for breeds and parse them into [Breed] entities
+  Future<Iterable<Breed>> getSearchBreeds(String query,
+      [int page = 0, int limit = 5, String order = 'Desc']) async {
+    final url = '${Consts.apiUrl}breeds/search?q=$query';
+
+    try {
+      final response = await api.client.get(url);
+
+      if (response.statusCode == 200) {
+        final breeds = <Breed>[];
+        for (var json in response.data) {
+          breeds.add(Breed.fromJson(json));
+        }
+        return breeds;
+      } else {
+        debugPrint('${response.statusCode} : ${response.data.toString()}');
+        throw response.statusCode;
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+      rethrow;
+    }
+  }
 }

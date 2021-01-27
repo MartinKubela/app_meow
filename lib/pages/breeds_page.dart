@@ -1,4 +1,5 @@
 import 'package:app_meow/components/breedCard/breed_card.dart';
+import 'package:app_meow/components/inputs/cat_input.dart';
 import 'package:app_meow/components/loading_indicator.dart';
 import 'package:app_meow/components/page_layout.dart';
 import 'package:app_meow/controls/breeds_control.dart';
@@ -51,16 +52,7 @@ class _BreedsBuilder extends StatelessWidget {
     final listKey = Provider.of<GlobalKey<BreedsListState>>(context);
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: TextField(
-            controller: control.filterInput,
-            cursorColor: theme.primaryColor,
-            decoration: InputDecoration(
-                hintStyle: theme.textTheme.caption,
-                hintText: 'Search breed...'),
-          ),
-        ),
+        CatInput(control.filterInput),
 
         /// After data from [getBreeds] is got, create breeds list
         FutureBuilder(
