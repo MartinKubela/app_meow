@@ -4,7 +4,7 @@ part 'cat_entity.g.dart';
 
 ///Cat entity,
 ///
-/// [toJson], [Breed.fromJson(json)] methods are generated with [JsonSerializableGenerator]
+/// [toJson], [Breed.fromJson(json)] methods are generated
 @JsonSerializable(nullable: false)
 class Cat {
   final String id;

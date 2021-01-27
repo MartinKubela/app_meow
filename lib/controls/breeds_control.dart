@@ -21,7 +21,9 @@ class BreedsControl extends BreedHandler with BackNavigator {
       ///On each character inputed filter breeds based on breeds that contains
       ///certain character in its name
 
-      breeds = await searchBreeds(filterInput.text);
+      breeds = (filterInput.text == null || filterInput.text.isEmpty)
+          ? _allBreeds
+          : await searchBreeds(filterInput.text);
 
       _listState.currentState.setState(() {});
     });

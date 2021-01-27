@@ -1,12 +1,11 @@
 import 'package:app_meow/entities/cat_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:json_serializable/json_serializable.dart';
 
 part 'breed_entity.g.dart';
 
 ///Breed entity,
 ///
-/// [toJson], [Breed.fromJson(json)] methods are generated with [JsonSerializableGenerator]
+/// [toJson], [Breed.fromJson(json)] methods are generated with
 @JsonSerializable(nullable: false)
 class Breed {
   final String id;
